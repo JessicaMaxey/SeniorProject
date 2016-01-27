@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="SeniorProject" Database="">
+  <Project Name="SoXtrials" Path="SoXtrials/SoXtrials.project" Active="No"/>
+  <Project Name="NanoCom" Path="NanoCom/NanoCom.project" Active="Yes"/>
+  <Project Name="SoX_API" Path="SoX_API/SoX_API.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="SoXtrials" ConfigName="Debug"/>
+      <Project Name="NanoCom" ConfigName="Debug"/>
+      <Project Name="SoX_API" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="SoXtrials" ConfigName="Release"/>
+      <Project Name="NanoCom" ConfigName="Release"/>
+      <Project Name="SoX_API" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
