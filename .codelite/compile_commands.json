@@ -1,0 +1,17 @@
+[{
+  "directory": "/home/jess/Documents/Repo/SeniorProject/SoX_API",
+  "command": "/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -g -std=c++14 -static-libgcc -static-libstdc++ -I. -I. -MG -MP -MT./Debug/API.cpp.o -MF./Debug/API.cpp.o.d -MM API.cpp",
+  "file": "/home/jess/Documents/Repo/SeniorProject/SoX_API/API.cpp"
+ }, {
+  "directory": "/home/jess/Documents/Repo/SeniorProject/SoX_API",
+  "command": "/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -c /home/jess/Documents/Repo/SeniorProject/SoX_API/API.cpp -g -std=c++14 -static-libgcc -static-libstdc++ -o ./Debug/API.cpp.o -I. -I.",
+  "file": "/home/jess/Documents/Repo/SeniorProject/SoX_API/API.cpp"
+ }, {
+  "directory": "/home/jess/Documents/Repo/SeniorProject/NanoCom",
+  "command": "/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -g -O0 -std=c++14 -Wall -static-libgcc -static-libstdc++ -I. -I. -MG -MP -MT./Debug/Nano.cpp.o -MF./Debug/Nano.cpp.o.d -MM Nano.cpp",
+  "file": "/home/jess/Documents/Repo/SeniorProject/NanoCom/Nano.cpp"
+ }, {
+  "directory": "/home/jess/Documents/Repo/SeniorProject/NanoCom",
+  "command": "/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -c /home/jess/Documents/Repo/SeniorProject/NanoCom/Nano.cpp -g -O0 -std=c++14 -Wall -static-libgcc -static-libstdc++ -o ./Debug/Nano.cpp.o -I. -I.",
+  "file": "/home/jess/Documents/Repo/SeniorProject/NanoCom/Nano.cpp"
+ }]

@@ -5,18 +5,18 @@
 ## Debug
 ProjectName            :=SoXtrials
 ConfigurationName      :=Debug
-WorkspacePath          := "/home/jess/Documents/Repo/SeniorProject/SeniorProject"
-ProjectPath            := "/home/jess/Documents/Repo/SeniorProject/SeniorProject/SoXtrials"
+WorkspacePath          := "/home/jess/Documents/Repo/SeniorProject"
+ProjectPath            := "/home/jess/Documents/Repo/SeniorProject/SoXtrials"
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=
-Date                   :=01/18/16
+Date                   :=01/29/16
 CodeLitePath           :="/home/jess/.codelite"
-LinkerName             :=/usr/bin/g++
-SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
+LinkerName             :=/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
+SharedObjectLinkerName :=/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -47,13 +47,13 @@ LibPath                := $(LibraryPathSwitch).
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := /usr/bin/ar rcu
-CXX      := /usr/bin/g++
-CC       := /usr/bin/gcc
+AR       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-ar rcu
+CXX      := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
+CC       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc
 CXXFLAGS :=  -g -O0 -std=c++14 -std=c++0x -std=c++11 -Wall  $(Preprocessors)
 CFLAGS   :=  -g -O0 -std=c++14 -std=c++11 -Wall $(Preprocessors)
 ASFLAGS  := 
-AS       := /usr/bin/as
+AS       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-as
 
 
 ##
@@ -92,7 +92,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/jess/Documents/Repo/SeniorProject/SeniorProject/SoXtrials/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/jess/Documents/Repo/SeniorProject/SoXtrials/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM "main.cpp"
 

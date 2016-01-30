@@ -5,18 +5,18 @@
 ## Debug
 ProjectName            :=SoX_API
 ConfigurationName      :=Debug
-WorkspacePath          := "/home/jess/Documents/Repo/SeniorProject/SeniorProject"
-ProjectPath            := "/home/jess/Documents/Repo/SeniorProject/SeniorProject/SoX_API"
+WorkspacePath          := "/home/jess/Documents/Repo/SeniorProject"
+ProjectPath            := "/home/jess/Documents/Repo/SeniorProject/SoX_API"
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=
-Date                   :=01/26/16
+Date                   :=01/29/16
 CodeLitePath           :="/home/jess/.codelite"
-LinkerName             :=/opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
-SharedObjectLinkerName :=/opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -shared -fPIC
+LinkerName             :=/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
+SharedObjectLinkerName :=/opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++ -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -35,7 +35,7 @@ PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="SoX_API.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-LinkOptions            :=  -lpthread
+LinkOptions            :=  -static -lpthread -static-libgcc -static-libstdc++
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). 
 IncludePCH             := 
 RcIncludePath          := 
@@ -47,13 +47,13 @@ LibPath                := $(LibraryPathSwitch).
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := /opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-ar rcu
-CXX      := /opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
-CC       := /opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc
-CXXFLAGS :=  -g -std=c++14 $(Preprocessors)
+AR       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-ar rcu
+CXX      := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-g++
+CC       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc
+CXXFLAGS :=  -g -std=c++14 -static-libgcc -static-libstdc++ $(Preprocessors)
 CFLAGS   :=  -g $(Preprocessors)
 ASFLAGS  := 
-AS       := /opt/cross/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-as
+AS       := /opt/cross/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-as
 
 
 ##
@@ -77,8 +77,8 @@ $(OutputFile): $(Objects)
 	@echo "" > $(IntermediateDirectory)/.d
 	@echo $(Objects0)  > $(ObjectsFileList)
 	$(AR) $(ArchiveOutputSwitch)$(OutputFile) @$(ObjectsFileList) $(ArLibs)
-	@$(MakeDirCommand) "/home/jess/Documents/Repo/SeniorProject/SeniorProject/.build-debug"
-	@echo rebuilt > "/home/jess/Documents/Repo/SeniorProject/SeniorProject/.build-debug/SoX_API"
+	@$(MakeDirCommand) "/home/jess/Documents/Repo/SeniorProject/.build-debug"
+	@echo rebuilt > "/home/jess/Documents/Repo/SeniorProject/.build-debug/SoX_API"
 
 MakeIntermediateDirs:
 	@test -d ./Debug || $(MakeDirCommand) ./Debug
@@ -94,7 +94,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/API.cpp$(ObjectSuffix): API.cpp $(IntermediateDirectory)/API.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/jess/Documents/Repo/SeniorProject/SeniorProject/SoX_API/API.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/API.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/jess/Documents/Repo/SeniorProject/SoX_API/API.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/API.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/API.cpp$(DependSuffix): API.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/API.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/API.cpp$(DependSuffix) -MM "API.cpp"
 

@@ -2,6 +2,11 @@
 
 #include <unistd.h>
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
+
 #include <wiringPi/include/wiringPi.h>
 #include <wiringPi/include/wiringPiSPI.h>
 
@@ -19,6 +24,8 @@ const int LED_OFF = 0;
 
 void Nano::LEDONandOFF (vector<float> & decAVG)
 {
+    //cout << "Inside LEDONandOFF" << endl;
+    
     char level = 0;
     char led = 0;
    
@@ -39,29 +46,45 @@ void Nano::LEDONandOFF (vector<float> & decAVG)
 
     for (int i = 0; i < NUM_OF_COL; i++)
     {
+        cout << "Inside first if at " << i << endl;
+        
         float current_box_db = 0;
+        
+        //cout << "decAVG: " << decAVG[i] << endl;
         
         for (int j = 0; j < NUM_OF_ROW; j++)
         {
+            cout << "Inside second if at " << j << endl;
+            
             //if the decibel average coming in from the API
             //is equal to or greater than the value of the hz
             //the current box represents, then turn on that box
             if (decAVG[i] >= current_box_db)
             {
+                cout << "Inside if(decAVG)" << endl;
                 int count = 0;
                 
                 //sets all 3 (red, green, blue) in 1 box to on
                 while (count < 3)
                 {
+                    cout << "Inside while(count < 3)" << count << endl;
+                    
                     //i is the num in the col, plus j will give us
                     //the box number of the led we are in, and adding
                     //the count makes sure that all 3 leds in the box
                     //get turned on
-                    led = (((i * NUM_OF_ROW * 3) + (j * 3)) + count);
-                    level = LED_ON;
+                    level = 0;
                     
+                    led = (((i * NUM_OF_ROW * 3) + (j * 3)) + count);
+                    
+                    level = LED_ON;
+
                     //writes out data for led
                     wiringPiSPIDataRW(0, (unsigned char *)&led, 1);
+                    
+                    
+                
+                    
                     //writes out data for level
                     wiringPiSPIDataRW(0, (unsigned char *)&level, 1);
                     
@@ -70,10 +93,13 @@ void Nano::LEDONandOFF (vector<float> & decAVG)
                 
                 //increase the current box to the next level for the
                 //next box.
+                
+                //cout << "incr current_box_db " << current_box_db << endl;
                 current_box_db += BOX_DB;
             }
             else
             {
+                cout << "Inside else" << endl;
                 int count = 0;
                 
                 //sets all 3 (red, green, blue) in 1 box to on
