@@ -3,8 +3,11 @@
   <Project Name="SoXtrials" Path="SoXtrials/SoXtrials.project" Active="No"/>
   <Project Name="NanoCom" Path="NanoCom/NanoCom.project" Active="No"/>
   <Project Name="SoX_API" Path="SoX_API/SoX_API.project" Active="No"/>
-  <Project Name="Main" Path="Main/Main.project" Active="Yes"/>
+  <Project Name="Main" Path="Main/Main.project" Active="No"/>
   <Project Name="pitest" Path="pitest/pitest.project" Active="No"/>
+  <Project Name="DatabaseTest" Path="DatabaseTest/DatabaseTest.project" Active="No"/>
+  <Project Name="SDL_mixer_Test" Path="SDL_mixer_Test/SDL_mixer_Test.project" Active="No"/>
+  <Project Name="VLC_media_test" Path="VLC_media_test/VLC_media_test.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="SoXtrials" ConfigName="Debug"/>
@@ -12,6 +15,9 @@
       <Project Name="SoX_API" ConfigName="Debug"/>
       <Project Name="Main" ConfigName="Debug"/>
       <Project Name="pitest" ConfigName="Debug"/>
+      <Project Name="DatabaseTest" ConfigName="Debug"/>
+      <Project Name="SDL_mixer_Test" ConfigName="Debug"/>
+      <Project Name="VLC_media_test" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="SoXtrials" ConfigName="Release"/>
@@ -19,6 +25,9 @@
       <Project Name="SoX_API" ConfigName="Release"/>
       <Project Name="Main" ConfigName="Release"/>
       <Project Name="pitest" ConfigName="Release"/>
+      <Project Name="DatabaseTest" ConfigName="Release"/>
+      <Project Name="SDL_mixer_Test" ConfigName="Release"/>
+      <Project Name="VLC_media_test" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

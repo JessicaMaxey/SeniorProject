@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Session Name="/home/jess/Documents/Repo/SeniorProject/SeniorProject.workspace">
-  <int Value="2" Name="m_selectedTab"/>
+  <int Value="0" Name="m_selectedTab"/>
   <wxString Value="/home/jess/Documents/Repo/SeniorProject/SeniorProject.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
-      <wxString Value="/home/jess/Documents/Repo/SeniorProject/Main/main.cpp" Name="FileName"/>
-      <int Value="3" Name="FirstVisibleLine"/>
-      <int Value="20" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/jess/Documents/Repo/SeniorProject/NanoCom/Nano.cpp" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="101" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/jess/Documents/Repo/SeniorProject/SoX_API/API.cpp" Name="FileName"/>
-      <int Value="106" Name="FirstVisibleLine"/>
-      <int Value="126" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/jess/Documents/Repo/SeniorProject/SoX_API/API.h" Name="FileName"/>
-      <int Value="17" Name="FirstVisibleLine"/>
-      <int Value="47" Name="CurrentLine"/>
+      <wxString Value="/home/jess/Documents/Repo/SeniorProject/VLC_media_test/main.cpp" Name="FileName"/>
+      <int Value="75" Name="FirstVisibleLine"/>
+      <int Value="92" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
