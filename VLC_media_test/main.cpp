@@ -227,7 +227,7 @@ void Shuffle()
     
 }
 
-void InitPlaylist(int playlist_selection_num)
+void InitPlaylist(string playlist_selection_num)
 {
 
 }
@@ -235,6 +235,25 @@ void InitPlaylist(int playlist_selection_num)
 void PlayPlaylist()
 {
     libvlc_media_list_player_play(media_list_player);
+}
+
+void DisplayMP3InPlaylist(string playlist_pk)
+{
+    string sql_str = "SELECT mp3_pk, name FROM mp3 " \
+                     "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
+                                      "WHERE playlists_fk = " + playlist_pk + ");";
+    int count = 1;
+    
+    ReadFromDatabase(sql_str);
+    
+    for (int i = 0; i < database_info.size(); i++)
+    {
+        if (i % 2)
+        {
+            cout << count << "." << database_info[i] << endl;
+            count++;
+        }
+    }
 }
 
 void DisplayMP3()
@@ -272,20 +291,101 @@ void DisplayPlaylist()
     
 }
 
-void DeletePlaylist(int playlist_to_delete)
+void DeletePlaylist(string playlist_to_delete)
 {
-    "DELETE FROM mp3_playlists \
-     WHERE mp3_playlists_pk = 20";
-}
-
-void DeleteMP3FromPlaylist(int playlist_to_delete)
-{
+    string sql_str = "DELETE FROM playlists WHERE playlists_pk = " + playlist_to_delete + ";";
     
+    ReadFromDatabase(sql_str);
+    
+    sql_str = "";
+    
+    sql_str = "DELETE FROM mp3_playlists WHERE playlists_fk = " + playlist_to_delete + ";";
+    
+    ReadFromDatabase(sql_str);
 }
 
-void DeleteMP3(int mp3_to_delete)
+void DeleteMP3FromPlaylist(string playlist_to_delete)
 {
+    DisplayMP3InPlaylist(playlist_to_delete);
+    
+    string mp3_selection = "";
+    
+    vector<string> mp3 = database_info;
 
+    cout << "Select a mp3: ";
+    cin >> mp3_selection;
+    cout << endl;
+
+    int mp3_selection_num = atoi(mp3_selection.c_str());
+    
+    string mp3_to_delete = "";
+    
+    int mp3_key = 0;
+    int count = 1;
+    for (int i = 0; i < (mp3.size()); i++)
+    {
+        if (i % 2 == 0)
+        {
+            if (count == mp3_selection_num)
+            {
+                mp3_key = i;
+                break;
+            }
+            else 
+                count++;
+        }
+    }
+    
+    mp3_to_delete = mp3[mp3_key];
+    
+    string sql_str = "DELETE FROM mp3_playlists WHERE mp3_fk = " + mp3_to_delete + " AND playlists_fk = " + playlist_to_delete + ";";
+    
+    ReadFromDatabase(sql_str);
+}
+
+void DeleteMP3()
+{
+    DisplayMP3();
+    
+    string mp3_selection = "";
+    
+    vector<string> mp3 = database_info;
+
+    cout << "Select a mp3: ";
+    cin >> mp3_selection;
+    cout << endl;
+
+    string mp3_to_delete = "";
+    
+    int mp3_selection_num = atoi(mp3_selection.c_str());
+    
+    int mp3_key = 0;
+    int count = 1;
+    for (int i = 0; i < (mp3.size()); i++)
+    {
+        if (i % 3 == 0)
+        {
+            if (count == mp3_selection_num)
+            {
+                mp3_key = i;
+                break;
+            }
+            else 
+                count++;
+        }
+    }
+    
+    mp3_to_delete = mp3[mp3_key];
+    
+    string sql_str = "DELETE FROM mp3 WHERE mp3_pk = " + mp3_to_delete + ";";
+    
+    ReadFromDatabase(sql_str);
+    
+    sql_str = "";
+    
+    sql_str = "DELETE FROM mp3_playlists WHERE mp3_fk = " + mp3_to_delete + ";";
+    
+    ReadFromDatabase(sql_str);
 }
 
 void AddToPlaylist(string playlist_adding_to)
@@ -336,8 +436,9 @@ void MP3Menu()
     string selection = "";
     
     cout << "Please select one of the following options:" << endl;
-    cout << "1. Display MP3s" << endl;
-    cout << "2. Exit" << endl;
+    cout << "1. MP3 options" << endl;
+    //cout << "2. Add new MP3s"
+    cout << "3. Exit" << endl;
     cout << "Selection: ";
     
     cin >> selection;
@@ -349,7 +450,9 @@ void MP3Menu()
     {
         case 1:
             {
-                DisplayMP3();
+                /*DisplayMP3();
+                vector<string> mp3 = database_info;
+                
                 string mp3_selection = "";
 
                 cout << "Select a mp3: ";
@@ -358,12 +461,12 @@ void MP3Menu()
                 
                 int mp3_selection_num = atoi(mp3_selection.c_str());
                             
-                selection = "";
+                selection = "";*/
 
-                cout << "Select one of the following playlist options:" << endl;
-                cout << "1. Play MP3" << endl;
-                cout << "2. Edit MP3" << endl;
-                cout << "3. Delete MP3" << endl;
+                cout << "Select one of the following mp3 options:" << endl;
+                cout << "1. Play a MP3" << endl;
+                cout << "2. Edit a MP3" << endl;
+                cout << "3. Delete a MP3" << endl;
                 cout << "4. Exit" << endl;
                 cout << "Selection: ";
 
@@ -381,6 +484,7 @@ void MP3Menu()
                     case 2:
                         break;
                     case 3:
+                        DeleteMP3();
                         break;
                     case 4:
                         break;
@@ -403,7 +507,7 @@ void PlaylistMenu()
     
     cout << "Please select one of the following options:" << endl;
     cout << "1. Display playlists" << endl;
-    cout << "2. Create new playlist" << endl;
+    //cout << "2. Create new playlist" << endl;
     cout << "3. Exit" << endl;
     cout << "Selection: ";
 
@@ -433,9 +537,9 @@ void PlaylistMenu()
 
                 cout << "Select one of the following playlist options:" << endl;
                 cout << "1. Play playlist" << endl;
-                cout << "2. Add MP3's to playlist" << endl;
-                cout << "3. Edit MP3's on playlist" << endl;
-                cout << "4. Delete MP3's on playlist" << endl;
+                cout << "2. Add MP3s to playlist" << endl;
+                cout << "3. Edit MP3s on playlist" << endl;
+                cout << "4. Delete MP3s on playlist" << endl;
                 cout << "5. Delete this playlist" << endl;
                 cout << "6. Exit" << endl;
                 cout << "Selection: ";
@@ -450,7 +554,7 @@ void PlaylistMenu()
                 switch(selection_num)
                 {
                     case 1:
-                        InitPlaylist(playlist_selection_num);
+                        InitPlaylist(playlist[playlist_selection_num - 1]);
                         PlayPlaylist();
                         break;
                     case 2:
@@ -459,8 +563,10 @@ void PlaylistMenu()
                     case 3:
                         break;
                     case 4:
+                        DeleteMP3FromPlaylist(playlist[playlist_selection_num - 1]);
                         break;
                     case 5:
+                        DeletePlaylist(playlist[playlist_selection_num - 1]);
                         break;
                     default:
                         break;
@@ -480,8 +586,8 @@ void Menu()
     string selection = "";
     
     cout << "Please select one of the following options:" << endl;
-    cout << "1. Playlist options" << endl;
-    cout << "2. MP3 options" << endl;
+    cout << "1. Playlist menu" << endl;
+    cout << "2. MP3 menu" << endl;
     cout << "3. Exit" << endl;
     cout << "Selection: ";
     
