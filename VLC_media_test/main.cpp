@@ -107,13 +107,7 @@ int ReadFromDatabase(string sql_str)
     else
     {
         fprintf(stderr, "Opened database successfully\n");
-    }
-    
-          
-    /*string sql_str = "SELECT location FROM mp3 " \
-                     "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
-                                      "WHERE playlists_fk = " + std::to_string(PLAYLIST_NUM) + ");";*/
-          
+    }      
     
     sql = sql_str.c_str();
     
@@ -233,34 +227,55 @@ void Shuffle()
     
 }
 
+void InitPlaylist(int playlist_selection_num)
+{
+
+}
+
+void PlayPlaylist()
+{
+    libvlc_media_list_player_play(media_list_player);
+}
+
 void DisplayMP3()
 {
-    string sql_str = "SELECT name FROM mp3;";
+    string sql_str = "SELECT * FROM mp3;";
+    int count = 1;
     
     ReadFromDatabase(sql_str);
     
     for (int i = 0; i < database_info.size(); i++)
     {
-        cout << i+1 << "." << database_info[i] << endl;
+        if (i % 3 == 1)
+        {
+            cout << count << "." << database_info[i] << endl;
+            count++;
+        }
     }
 }
 
 void DisplayPlaylist()
 {
-    string sql_str = "SELECT name FROM playlists;";
+    string sql_str = "SELECT * FROM playlists;";
+    int count = 1;
     
     ReadFromDatabase(sql_str);
     
-    for (int i = 0; i < database_info.size(); i++)
+    for (int i = 0; i < (database_info.size()); i++)
     {
-        cout << i+1 << "." << database_info[i] << endl;
+        if (i % 2)
+        {
+            cout << count << "." << database_info[i] << endl;
+            count++;
+        }
     }
     
 }
 
 void DeletePlaylist(int playlist_to_delete)
 {
-    
+    "DELETE FROM mp3_playlists \
+     WHERE mp3_playlists_pk = 20";
 }
 
 void DeleteMP3FromPlaylist(int playlist_to_delete)
@@ -273,9 +288,42 @@ void DeleteMP3(int mp3_to_delete)
 
 }
 
-void AddToPlaylist()
+void AddToPlaylist(string playlist_adding_to)
 {
+    DisplayMP3();
+    string mp3_selection = "";
     
+    vector<string> mp3 = database_info;
+
+    cout << "Select a mp3: ";
+    cin >> mp3_selection;
+    cout << endl;
+
+    int mp3_selection_num = atoi(mp3_selection.c_str());
+    
+    string mp3_to_add = "";
+    
+    int mp3_key = 0;
+    int count = 1;
+    for (int i = 0; i < (mp3.size()); i++)
+    {
+        if (i % 3 == 0)
+        {
+            if (count == mp3_selection_num)
+            {
+                mp3_key = i;
+                break;
+            }
+            else 
+                count++;
+        }
+    }
+    
+    mp3_to_add = mp3[mp3_key];
+    
+    string sql_str = "INSERT INTO mp3_playlists (mp3_fk, playlists_fk) VALUES (" + mp3_to_add + " ," + playlist_adding_to + ");";
+    
+    ReadFromDatabase(sql_str);
 }
 
 void EditPlaylist()
@@ -283,13 +331,12 @@ void EditPlaylist()
     
 }
 
-
 void MP3Menu()
 {
     string selection = "";
     
     cout << "Please select one of the following options:" << endl;
-    cout << "1. Display mp3s" << endl;
+    cout << "1. Display MP3s" << endl;
     cout << "2. Exit" << endl;
     cout << "Selection: ";
     
@@ -356,7 +403,8 @@ void PlaylistMenu()
     
     cout << "Please select one of the following options:" << endl;
     cout << "1. Display playlists" << endl;
-    cout << "2. Exit" << endl;
+    cout << "2. Create new playlist" << endl;
+    cout << "3. Exit" << endl;
     cout << "Selection: ";
 
     cin >> selection;
@@ -370,6 +418,7 @@ void PlaylistMenu()
             {
                 //Displays the playlists in the database
                 DisplayPlaylist();
+                vector<string> playlist = database_info;
                 
                 string playlist_selection = "";
 
@@ -401,8 +450,11 @@ void PlaylistMenu()
                 switch(selection_num)
                 {
                     case 1:
+                        InitPlaylist(playlist_selection_num);
+                        PlayPlaylist();
                         break;
                     case 2:
+                        AddToPlaylist(playlist[playlist_selection_num - 1]);
                         break;
                     case 3:
                         break;
@@ -523,7 +575,7 @@ int main(int argc, char **argv)
         input.push(user_input);
         
         string command = "";
-        const string commands [] = {"play", "pause", "next", "previous", "stop", "menu"};
+        const string commands [] = {"play", "pause", "next", "previous", "stop", "select", "menu"};
         int command_num = 0;
         
 
@@ -549,7 +601,7 @@ int main(int argc, char **argv)
         switch (command_num)
         {
             case PLAY:
-                libvlc_media_list_player_play(media_list_player);
+                PlayPlaylist();
                 break;
             case PAUSE:
                 libvlc_media_list_player_pause(media_list_player);
@@ -564,6 +616,8 @@ int main(int argc, char **argv)
                 break;
             case STOP:
                 libvlc_media_list_player_stop(media_list_player);
+                break;
+            case SELECT:
                 break;
             case MENU:
                 Menu();
