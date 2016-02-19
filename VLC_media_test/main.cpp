@@ -44,6 +44,7 @@ enum command_vals
     STOP,
     SELECT,
     MENU,
+    EXIT,
 };
 
 libvlc_instance_t *vlc_instance;
@@ -54,8 +55,6 @@ libvlc_media_list_t *media_list;
 vector<string> database_info;
 vector<string> file_locations;
 
-
-const int PLAYLIST_NUM = 5;
 void * void_ptr = 0;
 int done = 0;
 int playlist_count = -1;
@@ -229,11 +228,75 @@ void Shuffle()
 
 void InitPlaylist(string playlist_selection_num)
 {
+    //thread listen_thread(Listen);
 
+    
+    if (media_list_player != NULL)
+    {
+        //stop playing
+        //libvlc_media_player_stop(media_player);
+        libvlc_media_list_player_stop(media_list_player);
+        
+        //free the media player
+        //libvlc_media_player_release(media_player);
+        libvlc_media_list_player_release(media_list_player);
+        
+        libvlc_release(vlc_instance);
+    }
+    
+    string sql_str = "SELECT location FROM mp3 " \
+                     "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
+                                      "WHERE playlists_fk = " + playlist_selection_num + ");";
+    ReadFromDatabase(sql_str);
+    file_locations = database_info;
+        
+    //load the vlc engine
+    vlc_instance = libvlc_new(0, NULL);
+
+    
+    //create new item
+    for (unsigned int i = 0; i < file_locations.size(); i++)
+    {
+        media.push_back(libvlc_media_new_path(vlc_instance, file_locations[i].data()));
+    }
+    
+    //create a media play playing environment
+    media_player = libvlc_media_player_new_from_media(media[0]);
+    
+    //create a media list and media play list
+    media_list = libvlc_media_list_new(vlc_instance);
+    media_list_player = libvlc_media_list_player_new(vlc_instance);
+    libvlc_media_list_player_set_media_list(media_list_player, media_list);
+    libvlc_media_list_player_set_media_player(media_list_player, media_player);
+    
+
+    for (unsigned int i = 0; i < file_locations.size(); i++)
+    {
+        if(media[i])
+        {
+            libvlc_media_list_lock(media_list);
+            libvlc_media_list_add_media(media_list, media[i]);
+            libvlc_media_list_unlock(media_list);
+        }
+        
+        //no need to keep the media now
+        libvlc_media_release(media[i]);
+    }
+    
+    libvlc_event_manager_t* event_manager = libvlc_media_player_event_manager(media_player);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerEndReached, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerPaused, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerPlaying, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerPositionChanged, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerMediaChanged, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerStopped, HandleEvent, void_ptr);
+    libvlc_event_attach(event_manager, libvlc_MediaPlayerForward, HandleEvent, void_ptr);
 }
 
-void PlayPlaylist()
+void PlayPlaylist(string playlist_selection_num)
 {
+    InitPlaylist(playlist_selection_num);
+    playlist_count = -1;
     libvlc_media_list_player_play(media_list_player);
 }
 
@@ -426,6 +489,11 @@ void AddToPlaylist(string playlist_adding_to)
     ReadFromDatabase(sql_str);
 }
 
+void EditMP3()
+{
+    
+}
+
 void EditPlaylist()
 {
     
@@ -550,23 +618,39 @@ void PlaylistMenu()
                 selection_num = 0;
                 
                 selection_num = atoi(selection.c_str());
+
+                
+                int playlist_key = 0;
+                int count = 1;
+                for (int i = 0; i < (playlist.size()); i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        if (count == playlist_selection_num)
+                        {
+                            playlist_key = i;
+                            break;
+                        }
+                        else 
+                            count++;
+                    }
+                }
                 
                 switch(selection_num)
                 {
                     case 1:
-                        InitPlaylist(playlist[playlist_selection_num - 1]);
-                        PlayPlaylist();
+                        PlayPlaylist(playlist[playlist_key]);
                         break;
                     case 2:
-                        AddToPlaylist(playlist[playlist_selection_num - 1]);
+                        AddToPlaylist(playlist[playlist_key]);
                         break;
                     case 3:
                         break;
                     case 4:
-                        DeleteMP3FromPlaylist(playlist[playlist_selection_num - 1]);
+                        DeleteMP3FromPlaylist(playlist[playlist_key]);
                         break;
                     case 5:
-                        DeletePlaylist(playlist[playlist_selection_num - 1]);
+                        DeletePlaylist(playlist[playlist_key]);
                         break;
                     default:
                         break;
@@ -615,63 +699,6 @@ void Menu()
 
 int main(int argc, char **argv)
 {
-    //thread listen_thread(Listen);
-    
-    string sql_str = "SELECT location FROM mp3 " \
-                     "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
-                                      "WHERE playlists_fk = " + std::to_string(PLAYLIST_NUM) + ");";
-    ReadFromDatabase(sql_str);
-    file_locations = database_info;
-        
-    //load the vlc engine
-    vlc_instance = libvlc_new(0, NULL);
-
-    
-    //create new item
-    for (unsigned int i = 0; i < file_locations.size(); i++)
-    {
-        media.push_back(libvlc_media_new_path(vlc_instance, file_locations[i].data()));
-    }
-    
-    //create a media play playing environment
-    media_player = libvlc_media_player_new_from_media(media[0]);
-    
-    //create a media list and media play list
-    media_list = libvlc_media_list_new(vlc_instance);
-    media_list_player = libvlc_media_list_player_new(vlc_instance);
-    libvlc_media_list_player_set_media_list(media_list_player, media_list);
-    libvlc_media_list_player_set_media_player(media_list_player, media_player);
-    
-
-    for (unsigned int i = 0; i < file_locations.size(); i++)
-    {
-        if(media[i])
-        {
-            libvlc_media_list_lock(media_list);
-            libvlc_media_list_add_media(media_list, media[i]);
-            libvlc_media_list_unlock(media_list);
-        }
-        
-        //no need to keep the media now
-        libvlc_media_release(media[i]);
-    }
-    
-
-    
-    
-    libvlc_event_manager_t* event_manager = libvlc_media_player_event_manager(media_player);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerEndReached, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerPaused, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerPlaying, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerPositionChanged, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerMediaChanged, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerStopped, HandleEvent, void_ptr);
-    libvlc_event_attach(event_manager, libvlc_MediaPlayerForward, HandleEvent, void_ptr);
-    
-    //play the media_player
-    //libvlc_media_player_play(media_player);
-    //libvlc_media_list_player_play(media_list_player);
-
     while(!done)
     {
         string user_input;
@@ -681,7 +708,7 @@ int main(int argc, char **argv)
         input.push(user_input);
         
         string command = "";
-        const string commands [] = {"play", "pause", "next", "previous", "stop", "select", "menu"};
+        const string commands [] = {"play", "pause", "next", "previous", "stop", "select", "menu", "exit"};
         int command_num = 0;
         
 
@@ -707,26 +734,44 @@ int main(int argc, char **argv)
         switch (command_num)
         {
             case PLAY:
-                PlayPlaylist();
+                if (media_list_player != NULL)
+                {
+                    libvlc_media_list_player_play(media_list_player);
+                }
                 break;
             case PAUSE:
-                libvlc_media_list_player_pause(media_list_player);
+                if (media_list_player != NULL)
+                {
+                    libvlc_media_list_player_pause(media_list_player);
+                }
                 break;
             case NEXT:
-                playlist_next = true;
-                libvlc_media_list_player_next(media_list_player);
+                if (media_list_player != NULL)
+                {
+                    playlist_next = true;
+                    libvlc_media_list_player_next(media_list_player);
+                }
                 break;
             case PREVIOUS:
-                playlist_previous = true;
-                libvlc_media_list_player_previous(media_list_player);
+                if (media_list_player != NULL)
+                {
+                    playlist_previous = true;
+                    libvlc_media_list_player_previous(media_list_player);
+                }
                 break;
             case STOP:
-                libvlc_media_list_player_stop(media_list_player);
+                if (media_list_player != NULL)
+                {
+                    libvlc_media_list_player_stop(media_list_player);
+                }
                 break;
             case SELECT:
                 break;
             case MENU:
                 Menu();
+                break;
+            case EXIT:
+                done = 1;
                 break;
             default:
                 break;
@@ -736,15 +781,18 @@ int main(int argc, char **argv)
 
     }
     
-    //stop playing
-    //libvlc_media_player_stop(media_player);
-    libvlc_media_list_player_stop(media_list_player);
-    
-    //free the media player
-    //libvlc_media_player_release(media_player);
-    libvlc_media_list_player_release(media_list_player);
-    
-    libvlc_release(vlc_instance);
+    if (media_list_player != NULL)
+    {
+        //stop playing
+        //libvlc_media_player_stop(media_player);
+        libvlc_media_list_player_stop(media_list_player);
+        
+        //free the media player
+        //libvlc_media_player_release(media_player);
+        libvlc_media_list_player_release(media_list_player);
+        
+        libvlc_release(vlc_instance);
+    }
     
     return 0;
 }
