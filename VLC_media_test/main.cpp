@@ -226,7 +226,7 @@ void Shuffle()
     
 }
 
-void InitPlaylist(string playlist_selection_num)
+void InitPlaylist(string playlist_selection_num, bool playlist_or_mp3)
 {
     //thread listen_thread(Listen);
 
@@ -244,9 +244,20 @@ void InitPlaylist(string playlist_selection_num)
         libvlc_release(vlc_instance);
     }
     
-    string sql_str = "SELECT location FROM mp3 " \
-                     "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
-                                      "WHERE playlists_fk = " + playlist_selection_num + ");";
+    string sql_str = "";
+    
+    if (playlist_or_mp3 == 0)
+    {
+            sql_str = "SELECT location FROM mp3 " \
+                             "WHERE mp3_pk IN (SELECT mp3_fk FROM mp3_playlists " \
+                                              "WHERE playlists_fk = " + playlist_selection_num + ");";
+    }
+    else 
+    {
+            sql_str = "SELECT location FROM mp3 " \
+                             "WHERE mp3_pk = " + playlist_selection_num + ";";
+    }
+    
     ReadFromDatabase(sql_str);
     file_locations = database_info;
         
@@ -293,9 +304,9 @@ void InitPlaylist(string playlist_selection_num)
     libvlc_event_attach(event_manager, libvlc_MediaPlayerForward, HandleEvent, void_ptr);
 }
 
-void PlayPlaylist(string playlist_selection_num)
+void PlayPlaylist(string playlist_selection_num, bool playlist_or_mp3)
 {
-    InitPlaylist(playlist_selection_num);
+    InitPlaylist(playlist_selection_num, playlist_or_mp3);
     playlist_count = -1;
     libvlc_media_list_player_play(media_list_player);
 }
@@ -494,9 +505,50 @@ void EditMP3()
     
 }
 
-void EditPlaylist()
+void EditMP3OnPlaylist(string playlist_to_edit)
 {
+    DisplayMP3InPlaylist(playlist_to_edit);
     
+    string mp3_selection = "";
+    char* mp3_name;
+    
+    vector<string> mp3 = database_info;
+
+    cout << "Select a mp3: ";
+    cin >> mp3_selection;
+    cout << endl;
+
+    int mp3_selection_num = atoi(mp3_selection.c_str());
+    
+    cin.ignore();
+    cout << "Enter new name for MP3: ";
+    std::cin.getline(mp3_name, 256);
+    string new_mp3_name = mp3_name;
+    cout << "Hello, " << mp3_name << "!\n";
+    
+    string mp3_to_edit = "";
+    
+    int mp3_key = 0;
+    int count = 1;
+    for (int i = 0; i < (mp3.size()); i++)
+    {
+        if (i % 2 == 0)
+        {
+            if (count == mp3_selection_num)
+            {
+                mp3_key = i;
+                break;
+            }
+            else 
+                count++;
+        }
+    }
+    
+    mp3_to_edit = mp3[mp3_key];
+    
+    string sql_str = "UPDATE mp3 SET name = \"" + new_mp3_name + "\" WHERE mp3_pk = " + mp3_to_edit + ";";
+    
+    ReadFromDatabase(sql_str);
 }
 
 void MP3Menu()
@@ -518,18 +570,8 @@ void MP3Menu()
     {
         case 1:
             {
-                /*DisplayMP3();
-                vector<string> mp3 = database_info;
-                
-                string mp3_selection = "";
-
-                cout << "Select a mp3: ";
-                cin >> mp3_selection;
-                cout << endl;
-                
-                int mp3_selection_num = atoi(mp3_selection.c_str());
-                            
-                selection = "";*/
+ 
+                selection = "";
 
                 cout << "Select one of the following mp3 options:" << endl;
                 cout << "1. Play a MP3" << endl;
@@ -541,13 +583,42 @@ void MP3Menu()
                 cin >> selection;
                 cout << endl;
                 
+                DisplayMP3();
+                
+                vector<string> mp3 = database_info;
+                
+                string mp3_selection = "";
+                
+                cout << "Select a mp3: ";
+                cin >> mp3_selection;
+                cout << endl;
+                
+                int mp3_selection_num = atoi(mp3_selection.c_str());
+                
                 selection_num = 0;
                 
                 selection_num = atoi(selection.c_str());
                 
+                int mp3_key = 0;
+                int count = 1;
+                for (int i = 0; i < (mp3.size()); i++)
+                {
+                    if (i % 3 == 0)
+                    {
+                        if (count == mp3_selection_num)
+                        {
+                            mp3_key = i;
+                            break;
+                        }
+                        else 
+                            count++;
+                    }
+                }
+                
                 switch(selection_num)
                 {
                     case 1:
+                        PlayPlaylist(mp3[mp3_key], 1);
                         break;
                     case 2:
                         break;
@@ -639,12 +710,13 @@ void PlaylistMenu()
                 switch(selection_num)
                 {
                     case 1:
-                        PlayPlaylist(playlist[playlist_key]);
+                        PlayPlaylist(playlist[playlist_key], 0);
                         break;
                     case 2:
                         AddToPlaylist(playlist[playlist_key]);
                         break;
                     case 3:
+                        EditMP3OnPlaylist(playlist[playlist_key]);
                         break;
                     case 4:
                         DeleteMP3FromPlaylist(playlist[playlist_key]);
