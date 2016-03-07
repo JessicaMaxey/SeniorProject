@@ -52,6 +52,7 @@ libvlc_media_player_t *media_player = NULL;
 libvlc_media_list_player_t *media_list_player = NULL;
 vector<libvlc_media_t *> media;
 libvlc_media_list_t *media_list;
+libvlc_media_track_t *** tracks;
 vector<string> database_info;
 vector<string> file_locations;
 
@@ -162,7 +163,10 @@ void GetMP3info (string file_path)
 
 static void HandleEvent(const libvlc_event_t * p_event, void*)
 {
-    libvlc_time_t time;
+    //libvlc_time_t time;
+    uint32_t bitrate = 0;
+    uint32_t rate = 0;
+    libvlc_media_track_t ** tracks = nullptr;
     
     switch(p_event->type)
     {
@@ -184,7 +188,24 @@ static void HandleEvent(const libvlc_event_t * p_event, void*)
         case libvlc_MediaPlayerPaused:
             break;
         case libvlc_MediaPlayerPlaying:
-            GetMP3info(file_locations[playlist_count]);
+            {
+                GetMP3info(file_locations[playlist_count]);
+            
+                libvlc_media_t * poop = libvlc_media_list_item_at_index(media_list, playlist_count);
+                
+                /*libvlc_media_stats_t stats;
+                if(libvlc_media_get_stats(poop, &stats))
+                {
+                    FileRef file_ref (file_locations[playlist_count].data());
+                    long long time = file_ref.audioProperties()->length();
+
+                    bitrate = stats.i_read_bytes / time
+                }*/
+                
+                libvlc_media_parse(poop);
+                
+                auto fuck_you = libvlc_media_tracks_get(poop, &tracks);
+            }
             break;
         case libvlc_MediaPlayerStopped:
             playlist_count = 0;
@@ -213,6 +234,18 @@ static void HandleEvent(const libvlc_event_t * p_event, void*)
                 playlist_count++;
             break;
     }
+    
+    float samp_rate = 0.0;
+    
+    if (tracks)
+    {
+        bitrate = tracks[0]->i_bitrate;
+        rate = tracks[0]->audio->i_rate;
+        
+        samp_rate = rate / 4096.0;
+        samp_rate = (1 / (samp_rate)) * 1000000;
+    }
+    bitrate;
 }
 
 void Skip ()
@@ -236,6 +269,8 @@ void InitPlaylist(string playlist_selection_num, bool playlist_or_mp3)
         //stop playing
         //libvlc_media_player_stop(media_player);
         libvlc_media_list_player_stop(media_list_player);
+        
+        media.clear();
         
         //free the media player
         //libvlc_media_player_release(media_player);
@@ -289,7 +324,7 @@ void InitPlaylist(string playlist_selection_num, bool playlist_or_mp3)
             libvlc_media_list_add_media(media_list, media[i]);
             libvlc_media_list_unlock(media_list);
         }
-        
+
         //no need to keep the media now
         libvlc_media_release(media[i]);
     }
