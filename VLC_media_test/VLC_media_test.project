@@ -21,6 +21,8 @@
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
+    <File Name="../filedialog/examplewindow.cpp"/>
+    <File Name="../filedialog/examplewindow.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -33,12 +35,12 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-std=c++14;-std=c++0x;-std=c++11;-Wall;-static-libgcc;-static-libstdc++" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-std=c++14;-std=c++0x;-std=c++11;-Wall;-static-libgcc;-static-libstdc++;`pkg-config --cflags gtk+-3.0`;`pkg-config --cflags gtkmm-3.0`" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="/usr/include/vlc"/>
         <IncludePath Value="/usr/include/taglib"/>
       </Compiler>
-      <Linker Options="-lvlc;-lpthread;-ltag;-lsqlite3;" Required="yes">
+      <Linker Options="-lvlc;-lpthread;-ltag;-lsqlite3;`pkg-config --libs gtk+-3.0 gtkmm-3.0 glibmm-2.4 glib-2.0`;" Required="yes">
         <LibraryPath Value="/usr/include/vlc"/>
         <LibraryPath Value="/usr/include/taglib"/>
       </Linker>

@@ -7,8 +7,8 @@
   <Project Name="pitest" Path="pitest/pitest.project" Active="No"/>
   <Project Name="DatabaseTest" Path="DatabaseTest/DatabaseTest.project" Active="No"/>
   <Project Name="SDL_mixer_Test" Path="SDL_mixer_Test/SDL_mixer_Test.project" Active="No"/>
-  <Project Name="VLC_media_test" Path="VLC_media_test/VLC_media_test.project" Active="Yes"/>
   <Project Name="filedialog" Path="filedialog/filedialog.project" Active="No"/>
+  <Project Name="VLC_media_test" Path="VLC_media_test/VLC_media_test.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="SoXtrials" ConfigName="Debug"/>
@@ -18,8 +18,8 @@
       <Project Name="pitest" ConfigName="Debug"/>
       <Project Name="DatabaseTest" ConfigName="Debug"/>
       <Project Name="SDL_mixer_Test" ConfigName="Debug"/>
-      <Project Name="VLC_media_test" ConfigName="Debug"/>
       <Project Name="filedialog" ConfigName="Debug"/>
+      <Project Name="VLC_media_test" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="SoXtrials" ConfigName="Release"/>
@@ -29,8 +29,8 @@
       <Project Name="pitest" ConfigName="Release"/>
       <Project Name="DatabaseTest" ConfigName="Release"/>
       <Project Name="SDL_mixer_Test" ConfigName="Release"/>
-      <Project Name="VLC_media_test" ConfigName="Release"/>
       <Project Name="filedialog" ConfigName="Release"/>
+      <Project Name="VLC_media_test" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

@@ -33,7 +33,8 @@ using namespace TagLib;
 #include <fileref.h>
  
 #include <vlc.h>
-
+#include "examplewindow.h"
+#include <gtkmm/main.h>
 
 enum command_vals 
 {
@@ -63,6 +64,8 @@ int num_songs_in_playlist = 3;
 queue<string> input;
 bool playlist_next = false;
 bool playlist_previous = false;
+int m_argc;
+char ** m_argv;
 
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
@@ -452,9 +455,9 @@ void DeleteMP3FromPlaylist(string playlist_to_delete)
     ReadFromDatabase(sql_str);
 }
 
-void DeleteMP3()
+void DeleteMP3(string mp3_to_delete)
 {
-    DisplayMP3();
+    /*DisplayMP3();
     
     string mp3_selection = "";
     
@@ -467,6 +470,7 @@ void DeleteMP3()
     string mp3_to_delete = "";
     
     int mp3_selection_num = atoi(mp3_selection.c_str());
+    
     
     int mp3_key = 0;
     int count = 1;
@@ -484,7 +488,7 @@ void DeleteMP3()
         }
     }
     
-    mp3_to_delete = mp3[mp3_key];
+    mp3_to_delete = mp3[mp3_key];*/
     
     string sql_str = "DELETE FROM mp3 WHERE mp3_pk = " + mp3_to_delete + ";";
     
@@ -586,13 +590,97 @@ void EditMP3OnPlaylist(string playlist_to_edit)
     ReadFromDatabase(sql_str);
 }
 
+void AddNewMP3InDatabase(string mp3_name, string new_mp3_location)
+{
+    string sql_str = "INSERT INTO mp3 (name, location) VALUES (\"" + mp3_name + "\" , \"" + new_mp3_location + "\");";
+    
+    FileRef file_ref (new_mp3_location.data());
+    String title = file_ref.tag()->title();
+    
+    if(title == "")
+    {
+        file_ref.tag()->setTitle(mp3_name);
+        file_ref.save();
+    }
+    
+    ReadFromDatabase(sql_str);
+}
+
+void AddNewMP3()
+{
+
+    FILE *fp1, *fp2;
+    char buffer[4096];
+    long size;
+    long size_remainder;
+    size_t result = 0;
+    string dest_name = "/home/jess/Music/";
+    string mp3_name = "";
+    string filename = "";
+
+    Gtk::Main kit(m_argc, m_argv);
+
+    ExampleWindow window;
+    //Shows the window and returns when it is closed.
+    Gtk::Main::run(window);
+
+    filename = window.GetFilename();
+
+    fp1 = fopen(filename.c_str(), "rb");
+    
+    size_t found = filename.find_last_of("/");
+    mp3_name = filename.substr(found + 1);
+    dest_name += filename.substr(found + 1);
+    
+    fp2 = fopen(dest_name.c_str(), "w+b");
+
+    
+    if(fp1 == NULL)
+    {
+        cout << "File error " << stderr << endl;
+        exit(1);
+    }
+
+    fseek (fp1, 0, SEEK_END);
+    size = (ftell (fp1)) / 4096;
+    size_remainder = (ftell (fp1)) % 4096;
+    rewind(fp1);
+    
+    if(buffer == NULL)
+    {
+        cout << "Memory error " << stderr << endl;
+        exit(2);
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        result += fread(buffer, 1, 4096, fp1);
+        fwrite(buffer, sizeof(char), 4096, fp2);
+    }
+
+    result += fread(buffer, 1, size_remainder, fp1);
+    fwrite(buffer, sizeof(char), size_remainder, fp2);
+    
+    if(result != (ftell(fp1)))
+    {
+        cout << "Reading error " << stderr << endl;
+        exit(3);
+    }
+
+    fclose(fp1);
+    fclose(fp2);
+    
+    AddNewMP3InDatabase(mp3_name, dest_name);
+    
+}
+
 void MP3Menu()
 {
     string selection = "";
     
     cout << "Please select one of the following options:" << endl;
     cout << "1. MP3 options" << endl;
-    //cout << "2. Add new MP3s"
+    cout << "2. Add new MP3s" << endl;
     cout << "3. Exit" << endl;
     cout << "Selection: ";
     
@@ -658,7 +746,7 @@ void MP3Menu()
                     case 2:
                         break;
                     case 3:
-                        DeleteMP3();
+                        DeleteMP3(mp3[mp3_key]);
                         break;
                     case 4:
                         break;
@@ -669,6 +757,11 @@ void MP3Menu()
                     
                 }
             }
+            break;
+        case 2:
+            AddNewMP3();
+            break;
+        case 3:
             break;
         default:
             break;
@@ -806,6 +899,10 @@ void Menu()
 
 int main(int argc, char **argv)
 {
+    
+    m_argc = argc;
+    m_argv = argv;
+    
     while(!done)
     {
         string user_input;

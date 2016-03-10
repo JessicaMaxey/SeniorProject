@@ -1,0 +1,1 @@
+./Debug/base.cpp.o ./Debug/examplewindow.cpp.o

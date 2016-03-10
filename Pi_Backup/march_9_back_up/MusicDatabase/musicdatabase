@@ -1,0 +1,24 @@
+insert into mp3 (name, location)
+values ('short', '/home/jess/Music/short.mp3');
+
+insert into mp3 (name, location)
+values ('sixminutes', '/home/jess/Music/sixminutes.mp3');
+
+insert into playlists (name)
+values ('one song');
+
+insert into playlists (name)
+values ('two songs');
+
+insert into mp3_playlists (mp3_fk, playlists_fk)
+values (1, 1);
+
+insert into mp3_playlists (mp3_fk, playlists_fk)
+values (1, 2);
+
+insert into mp3_playlists (mp3_fk, playlists_fk)
+values (2, 2);
+
+select * from mp3;
+select * from playlists;
+select * from mp3_playlists;

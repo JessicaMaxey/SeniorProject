@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="vlc_media" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/vlc_media" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-g" />
+					<Add directory="/usr/include/taglib" />
+					<Add directory="/usr/include/vlc" />
+				</Compiler>
+				<Linker>
+					<Add directory="/usr/include/taglib" />
+					<Add directory="/usr/include/vlc" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/vlc_media" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-std=c++0x" />
+					<Add directory="/usr/include/taglib" />
+					<Add directory="/usr/include/vlc" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-fexceptions" />
+			<Add directory="../audio_analyzer" />
+			<Add directory="../nano_com" />
+			<Add directory="../API" />
+		</Compiler>
+		<Linker>
+			<Add option="-lpthread" />
+			<Add library="/usr/lib/arm-linux-gnueabihf/libtag.so" />
+			<Add library="/usr/lib/arm-linux-gnueabihf/libsqlite3.so" />
+			<Add library="/usr/lib/libvlc.so" />
+			<Add library="/home/pi/Documents/API/libAPI.a" />
+			<Add library="/home/pi/Documents/audio_analyzer/libaudio_analyzer.a" />
+			<Add library="/home/pi/Documents/nano_com/libnano_com.a" />
+			<Add library="/usr/local/lib/libsox.so" />
+			<Add library="/usr/local/lib/libwiringPi.so" />
+		</Linker>
+		<Unit filename="../VLC_media_test/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

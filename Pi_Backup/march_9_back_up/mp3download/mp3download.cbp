@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="mp3download" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/mp3download" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="`pkg-config --cflags gtkmm-3.0 gtk+-3.0`" />
+				</Compiler>
+				<Linker>
+					<Add option="-lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lgio-2.0 -lcairomm-1.0 -lcairo -lgdk_pixbuf-2.0 -lglibmm-2.4 -lgobject-2.0 -lsigc-2.0 -lglib-2.0" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/mp3download" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=c++0x" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="`pkg-config --cflags gtkmm-3.0 gtk+-3.0`" />
+					<Add directory="/usr/include/gtk-3.0 /usr/include/cairo /usr/include/pixman-1 /usr/include/gdk-pixbuf-2.0 /usr/include/libpng12 /usr/include/atk-1.0 /usr/include/at-spi2-atk/2.0 /usr/include/at-spi-2.0 /usr/include/dbus-1.0 /usr/lib/arm-linux-gnueabihf/dbus-1.0/include /usr/include/pango-1.0  /usr/include/freetype2 /usr/include/harfbuzz /usr/include/gio-unix-2.0/ -pthread /usr/include/glib-2.0 /usr/lib/arm-linux-gnueabihf/glib-2.0/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lgio-2.0 -lcairomm-1.0 -lcairo -lgdk_pixbuf-2.0 -lglibmm-2.4 -lgobject-2.0 -lsigc-2.0 -lglib-2.0" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++0x" />
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../file_dialog_main/base.cpp" />
+		<Unit filename="../file_dialog_main/examplewindow.cpp" />
+		<Unit filename="../file_dialog_main/examplewindow.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

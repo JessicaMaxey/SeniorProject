@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="led_tests" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/led_tests" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-std=c++0x" />
+					<Add directory="../audio_analyzer" />
+					<Add directory="../nano_com" />
+				</Compiler>
+				<Linker>
+					<Add option="-lpthread" />
+					<Add library="/home/pi/Documents/API/libAPI.a" />
+					<Add library="/home/pi/Documents/audio_analyzer/libaudio_analyzer.a" />
+					<Add library="/home/pi/Documents/nano_com/libnano_com.a" />
+					<Add library="/usr/local/lib/libwiringPi.so" />
+					<Add library="/usr/local/lib/libsox.so" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/led_tests" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lpthread" />
+					<Add library="/home/pi/Documents/API/libAPI.a" />
+					<Add library="/home/pi/Documents/audio_analyzer/libaudio_analyzer.a" />
+					<Add library="/home/pi/Documents/nano_com/libnano_com.a" />
+					<Add library="/usr/local/lib/libwiringPi.so" />
+					<Add library="/usr/local/lib/libsox.so" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++0x" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="../nano_com" />
+			<Add directory="../audio_analyzer" />
+			<Add directory="../API" />
+		</Compiler>
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

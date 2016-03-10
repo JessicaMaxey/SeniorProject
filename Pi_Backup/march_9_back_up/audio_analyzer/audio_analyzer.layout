@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="AudioAnalyzer.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="AudioAnalyzer.h" open="1" top="0" tabpos="2">
+		<Cursor position="77" topLine="0" />
+	</File>
+	<File name="SoXDriver.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="1860" topLine="75" />
+	</File>
+	<File name="SoXDriver.h" open="1" top="0" tabpos="3">
+		<Cursor position="505" topLine="6" />
+	</File>
+</CodeBlocks_layout_file>
